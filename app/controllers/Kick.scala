@@ -11,6 +11,7 @@ import play.api._
 import play.api.mvc._
 
 object Kick extends Controller with ServerCredentials with spotify.Spotify with spotify.PlayCacheCaching with songkick.Songkick {
+  // scalastyle:off public.methods.have.type
 
   import scala.concurrent._
 

@@ -11,6 +11,8 @@ import play.api._
 import play.api.mvc._
 
 object Authorization extends Controller with ServerCredentials with spotify.Spotify with spotify.PlayCacheCaching {
+  // scalastyle:off public.methods.have.type
+
   import scala.concurrent.Future
 
   import play.api.Play.current
