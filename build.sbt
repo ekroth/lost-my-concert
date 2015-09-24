@@ -16,8 +16,8 @@ lazy val playSongkick = RootProject(uri(s"file:////Users/ekroth/Documents/git/pl
 
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala)
-  .dependsOn(playSpotify)
-  .dependsOn(playSongkick)
+  .aggregate(playSpotify, playSongkick)
+  .dependsOn(playSpotify, playSongkick)
 
 scalaVersion := "2.11.6"
 
