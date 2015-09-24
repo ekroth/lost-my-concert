@@ -18,3 +18,6 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.0.0")
 addSbtPlugin("com.typesafe.sbt" % "sbt-mocha" % "1.0.0")
 
 // addSbtPlugin("io.spray" % "sbt-revolver" % "0.7.1")
+
+addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.7.0")
+

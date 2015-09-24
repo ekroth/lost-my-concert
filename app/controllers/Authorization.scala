@@ -1,3 +1,9 @@
+/* Copyright (c) 2015 Andrée Ekroth.
+ * Distributed under the MIT License (MIT).
+ * See accompanying file LICENSE or copy at
+ * http://opensource.org/licenses/MIT
+ */
+
 package com.github.ekroth
 package controllers
 
@@ -13,13 +19,15 @@ object Authorization extends Controller with ServerCredentials with spotify.Spot
 
   val rand = new scala.util.Random()
 
+  val stateLength = 16
+
   /** Redirect user to Spotify authorization.
     *
     * A random state is generated and added to the session cookie.
     * Spotify redirects back to `authorized`.
     */
   def authorize = Action {
-    val state = rand.alphanumeric.take(16).mkString
+    val state = rand.alphanumeric.take(stateLength).mkString
     Redirect(redirectUri(Some(state))).withSession("state" -> state)
   }
 
@@ -36,7 +44,7 @@ object Authorization extends Controller with ServerCredentials with spotify.Spot
     val expectedState = request.session.get("state")
     val unable = Unauthorized(views.html.message("Unable to authorize."))
 
-    if (state.isDefined && expectedState.isDefined/* && state.get == expectedState.get*/) {
+    if (state.isDefined && expectedState.isDefined && state.get == expectedState.get) {
       (ps.get("code"), ps.get("error")) match {
 
         case (Some(c), None) => userAuth(c.mkString).map { userOpt =>
@@ -46,7 +54,8 @@ object Authorization extends Controller with ServerCredentials with spotify.Spot
         case (None, Some(e)) => Future.successful(unable)
         case _ => Future.successful(unable)
       }
-
-    } else Future.successful(unable)
+    } else {
+      Future.successful(unable)
+    }
   }
 }

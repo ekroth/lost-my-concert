@@ -11,3 +11,5 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 GET     /authorize                  com.github.ekroth.controllers.Authorization.authorize
 
 GET     /authorized                 com.github.ekroth.controllers.Authorization.authorized
+
+GET     /search/:name               com.github.ekroth.controllers.Kick.venues(name)
