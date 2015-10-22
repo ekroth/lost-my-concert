@@ -5,6 +5,7 @@
  */
 
 package com.github.ekroth
+package concert
 package controllers
 
 import scala.concurrent.ExecutionContext
