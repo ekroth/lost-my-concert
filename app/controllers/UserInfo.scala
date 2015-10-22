@@ -5,6 +5,7 @@
  */
 
 package com.github.ekroth
+package concert
 package controllers
 
 import play.api._
@@ -26,8 +27,8 @@ object UserInfo extends Controller with ServerCredentials with spotify.Spotify w
   private[this] lazy val logger = Logger(getClass())
 
   def index = Action.async { implicit request =>
-    withUserAsync(Unauthorized(views.html.index(None))) { user =>
-      currentUserProfile(user).map { profileOpt =>
+    SpotifyAPI.withUserAsync(Unauthorized(views.html.index(None))) { user =>
+      SpotifyAPI.currentUserProfile(user).map { profileOpt =>
         Ok(views.html.index(profileOpt))
       }
     }
