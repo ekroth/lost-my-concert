@@ -5,15 +5,20 @@
  */
 
 package com.github.ekroth
+package concert
 package controllers
 
 import play.api._
 import play.api.mvc._
 
-object Kick extends Controller with ServerCredentials with spotify.Spotify with spotify.PlayCacheCaching with songkick.Songkick {
+object Kick extends Controller with ServerCredentials with spotify.Spotify with spotify.PlayCacheCaching {
   // scalastyle:off public.methods.have.type
 
   import scala.concurrent._
+  import scalaz._
+  import Scalaz._
+  import scalaz.contrib._
+  import scalaz.contrib.std._
 
   import play.api.Play.current
   import play.api.libs.iteratee._
@@ -22,35 +27,105 @@ object Kick extends Controller with ServerCredentials with spotify.Spotify with 
 
   import Contexts._
   import spotify._
+  import songkick._
+  import errorhandling._
 
   private[this] lazy val logger = Logger(getClass())
 
-  def idsByMetroName(name: String): Future[Seq[String]] = {
-    for {
-      locsPage <- locationNameSearch(name)
-      locs <- locsPage.allItems
-    } yield for {
-      loc <- locs
-      id <- loc \\ "id"
-    } yield id.toString
-  }
 
-  def venuesByMetroName(name: String): Future[Seq[JsValue]] = {
+
+/*
+  def eventsByMetroName(name: String): ResultF[Seq[Event]] = {
     for {
       ids <- idsByMetroName(name)
       eventsF = ids.map(metroEvents)
-      event <- Future.sequence(eventsF)
+      event <- ResultFOK(Future.sequence(eventsF).right)
       pagesF = event.map(_.allItems)
-      allEvents <- Future.sequence(pagesF)
+      allEvents <- ResultFOK(Future.sequence(pagesF))
     } yield allEvents.flatten
+  }
+
+  def eventsToArtistNames(xs: Seq[Event]): Seq[String] =
+    for {
+      x <- xs
+      p <- x.performance
+      as = p.artist
+      name = as.displayName
+      n = name.asInstanceOf[JsString]
+    } yield n.value
+
+  def userFollowedArtists = Action.async { implicit request =>
+    withUserAsync(Ok(views.html.message("Who are you really?"))) { user =>
+      for {
+        artistsOpt <- currentUserFollowedArtists(user)
+        artists <- artistsOpt.map(_.allItems(user)).getOrElse(Future.successful(Nil))
+        names = artists.map(_.name)
+        } yield Ok(views.html.message(names.mkString(", ")))
+      }
+    }
+
+  def userLiked = Action.async { implicit request =>
+    withUserAsync(Ok(views.html.message("Who are you really?"))) { user =>
+      for {
+        tracksOpt <- currentUserTracks(user)
+        tracks <- tracksOpt.map(_.allItems(user)).getOrElse(Future.successful(Nil))
+        track = tracks.map(_.track.name)
+        } yield Ok(views.html.message(track.mkString(", ")))
+      }
+    }
+
+  def search(query: String) = Action.async { implicit request =>
+    withUserAsync(Ok(views.html.message("I don't really trust you, user."))) { user =>
+      withClientAsync(Ok(views.html.message("Stop it client, stop it!"))) { client =>
+        for {
+          artistPageOpt <- searchArtist(client, query)
+          allOptF = artistPageOpt.map(_.allItems(client))
+          all <- allOptF.getOrElse(Future.successful(Seq.empty))
+          ids = all.map(_.id)
+          names = all.map(_.name)
+          follows <- currentUserIsFollowing(user, ids: _*)
+          fWithName = follows.zip(names)
+        } yield Ok(views.html.message(fWithName.mkString(", ")))
+      }
+    }
+  }
+
+  def around(metroName: String) = Action.async { implicit request =>
+    withUserAsync(Ok(views.html.message("Who are you really?"))) { user =>
+      for {
+        events <- eventsByMetroName(metroName)
+        artistNames = eventsToArtistNames(events)
+        eventNames = events.map(_.displayName)
+        artistsOpt <- currentUserFollowedArtists(user)
+        artists <- artistsOpt.map(_.allItems(user)).getOrElse(Future.successful(Nil))
+        names = artists.map(_.name.toLowerCase).toSet
+        nameWithEvents = eventNames.zip(artistNames)
+        matches = nameWithEvents.filter(x => names.contains(x._2.toLowerCase))
+        matchNames = matches.map(_._1)
+      } yield {
+//        logger.debug(s"Venues: $venues")
+//        logger.debug(s"VenueNames: $venueNames")
+        logger.debug(s"Available: $artistNames")
+        logger.debug(s"Following: $names")
+        logger.debug(s"Matches: $matches")
+        Ok(views.html.message(matchNames.mkString(", ")))
+      }
+    }
   }
 
   def venues(name: String) = Action.async { implicit request =>
     for {
-      venues <- venuesByMetroName(name)
-      pretty = venues.map(Json.prettyPrint)
-    } yield Ok(views.html.message(pretty.mkString("\nxxxxxxxx\n")))
+      events <- eventsByMetroName(name)
+    } yield Ok(views.html.message(events.mkString(", ")))
   }
+
+  def artists(name: String) = Action.async { implicit request =>
+    for {
+      events <- eventsByMetroName(name)
+      names = eventsToArtistNames(events)
+    } yield Ok(views.html.message(names.mkString(", ")))
+  }
+ */
 
   // def search(query: String) = Action.async { implicit request =>
   //   for {
