@@ -10,6 +10,7 @@
  - [ ] Custom artists
  - [ ] Soundcloud
  - [x] Spotify
+ - [ ] Spotify related artists
 - Providers
  - [x] Songkick
  - [ ] Bandsintown
