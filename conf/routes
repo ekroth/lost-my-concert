@@ -3,13 +3,40 @@
 # ~~~~
 
 # Home page
-GET     /                           com.github.ekroth.controllers.UserInfo.index
+GET     /                           com.github.ekroth.concert.controllers.UserInfo.index
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
-GET     /authorize                  com.github.ekroth.controllers.Authorization.authorize
+GET     /authorize                  com.github.ekroth.concert.controllers.Authorization.authorize
 
-GET     /authorized                 com.github.ekroth.controllers.Authorization.authorized
+GET     /authorized                 com.github.ekroth.concert.controllers.Authorization.authorized
 
-GET     /search/:name               com.github.ekroth.controllers.Kick.venues(name)
+#GET     /venues/:name               com.github.ekroth.concert.controllers.Kick.venues(name)
+
+#GET     /artists/:name              com.github.ekroth.concert.controllers.Kick.artists(name)
+
+#GET     /followed                   com.github.ekroth.concert.controllers.Kick.userFollowedArtists
+
+#GET     /liked                      com.github.ekroth.concert.controllers.Kick.userLiked
+
+#GET     /search/:q                  com.github.ekroth.concert.controllers.Kick.search(q)
+
+#GET     /around/:q                  com.github.ekroth.concert.controllers.Kick.around(q)
+
+
+
+# Songkick
+GET     /songkick/locationNameSearch/:q com.github.ekroth.concert.controllers.SongkickController.locationNameSearchAction(q)
+
+GET     /songkick/metroEvents/:q        com.github.ekroth.concert.controllers.SongkickController.metroEventsAction(q)
+
+
+# Bandsintown
+GET     /bandsintown/artist/:q                com.github.ekroth.concert.controllers.BandsintownController.findArtistAction(q)
+
+GET     /bandsintown/find/:q                  com.github.ekroth.concert.controllers.BandsintownController.findEventsAction(q)
+
+GET     /bandsintown/search/:q/:l             com.github.ekroth.concert.controllers.BandsintownController.searchEventsAction(q, l)
+
+GET     /bandsintown/recommended/:q/:l/:o     com.github.ekroth.concert.controllers.BandsintownController.searchRecommendedAction(q, l, o: Boolean)
