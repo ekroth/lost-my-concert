@@ -65,3 +65,4 @@ project/plugins/project/
 .songkick_api_key
 .spotify_client_id
 .spotify_client_secret
+.bandsintown_api_key
