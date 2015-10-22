@@ -9,9 +9,9 @@
 - Sources
  - [ ] Custom artists
  - [ ] Soundcloud
- - [ ] Spotify
+ - [x] Spotify
 - Providers
- - [ ] Songkick
+ - [x] Songkick
  - [ ] Bandsintown
 - Frontends
  - [ ] Mail
