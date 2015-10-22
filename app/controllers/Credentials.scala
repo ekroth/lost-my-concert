@@ -5,6 +5,7 @@
  */
 
 package com.github.ekroth
+package concert
 package controllers
 
 trait ServerCredentials {
@@ -17,4 +18,7 @@ trait ServerCredentials {
 
   implicit val songkickCredentials = songkick.Credentials(
     Source.fromFile(".songkick_api_key").mkString.replaceAll("\n", ""))
+
+  implicit val bandsintownCredentials = bandsintown.Credentials(
+    Source.fromFile(".bandsintown_api_key").mkString.replaceAll("\n", ""))
 }
