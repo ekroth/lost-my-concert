@@ -28,8 +28,8 @@ object UserInfo extends Controller with ServerCredentials with spotify.Spotify w
 
   def index = Action.async { implicit request =>
     SpotifyAPI.withUserAsync(Unauthorized(views.html.index(None))) { user =>
-      SpotifyAPI.currentUserProfile(user).map { profileOpt =>
-        Ok(views.html.index(profileOpt))
+      SpotifyAPI.currentUserProfile(user).run.map { profileRes =>
+        Ok(views.html.index(profileRes.toOption))
       }
     }
   }

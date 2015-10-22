@@ -25,6 +25,9 @@ GET     /authorized                 com.github.ekroth.concert.controllers.Author
 #GET     /around/:q                  com.github.ekroth.concert.controllers.Kick.around(q)
 
 
+# Kick
+GET     /kick/relevant/:lat/:lon/:dist com.github.ekroth.concert.controllers.Kick.relevant(lat: Double, lon: Double, dist: Double)
+
 
 # Songkick
 GET     /songkick/locationNameSearch/:q com.github.ekroth.concert.controllers.SongkickController.locationNameSearchAction(q)

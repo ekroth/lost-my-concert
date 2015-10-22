@@ -32,6 +32,21 @@ object Kick extends Controller with ServerCredentials with spotify.Spotify with 
 
   private[this] lazy val logger = Logger(getClass())
 
+  def relevant(lat: Double, lon: Double, dist: Double) = Action.async { implicit request =>
+    SpotifyAPI.withUserAsync(Ok(views.html.index(None))) { user =>
+      (for {
+        artistPage <- SpotifyAPI.currentUserFollowedArtists(user)
+        artists <- artistPage.allItems(user)
+        names = artists.map(_.name)
+        events <- Matcher.relevantEvents(names, lat, lon, dist)
+        eventNames = events.map(_.displayName)
+      } yield eventNames).run.map {
+        case \/-(xs) => Ok(views.html.message(xs.mkString("\n")))
+        case -\/(x) => Ok(views.html.message(x.toString))
+      }
+    }
+  }
+
 
 
 /*
