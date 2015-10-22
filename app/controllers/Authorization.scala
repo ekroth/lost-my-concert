@@ -5,6 +5,7 @@
  */
 
 package com.github.ekroth
+package concert
 package controllers
 
 import play.api._
@@ -30,7 +31,7 @@ object Authorization extends Controller with ServerCredentials with spotify.Spot
     */
   def authorize = Action {
     val state = rand.alphanumeric.take(stateLength).mkString
-    Redirect(redirectUri(Some(state))).withSession("state" -> state)
+    Redirect(SpotifyAPI.redirectUri(Some(state))).withSession("state" -> state)
   }
 
   /** Redirect from Spotify authorization. Obtain access token.
@@ -49,7 +50,7 @@ object Authorization extends Controller with ServerCredentials with spotify.Spot
     if (state.isDefined && expectedState.isDefined && state.get == expectedState.get) {
       (ps.get("code"), ps.get("error")) match {
 
-        case (Some(c), None) => userAuth(c.mkString).map { userOpt =>
+        case (Some(c), None) => SpotifyAPI.userAuth(c.mkString).map { userOpt =>
           userOpt.map(_ => Redirect("/").withSession("auth_code" -> c.mkString)).getOrElse(unable)
         }
 
