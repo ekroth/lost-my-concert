@@ -18,3 +18,4 @@
  - [ ] Telegram
 - Various
  - [ ] Show Facebook Like button for artists (not already liked)
+ - [ ] Replace Play with pure Akka
