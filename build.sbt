@@ -12,25 +12,28 @@ scalaVersion := "2.11.7"
 
 lazy val errorhandling = RootProject(uri(s"file:////Users/ekroth/Documents/git/errorhandling"))
 
-lazy val playSpotify = RootProject(uri(s"file:////Users/ekroth/Documents/git/play-spotify"))
+lazy val akkaSpotify = RootProject(uri(s"file:////Users/ekroth/Documents/git/play-spotify"))
 
-lazy val playSongkick = RootProject(uri(s"file:////Users/ekroth/Documents/git/play-songkick"))
-
-lazy val playBandsintown = RootProject(uri(s"file:////Users/ekroth/Documents/git/play-bandsintown"))
+lazy val akkaSongkick = RootProject(uri(s"file:////Users/ekroth/Documents/git/play-songkick"))
 
 lazy val root = (project in file("."))
-  .enablePlugins(PlayScala)
-  .aggregate(errorhandling, playSpotify, playSongkick, playBandsintown)
-  .dependsOn(errorhandling, playSpotify, playSongkick, playBandsintown)
+  .aggregate(errorhandling, akkaSpotify, akkaSongkick)
+  .dependsOn(errorhandling, akkaSpotify, akkaSongkick)
 
-scalaVersion := "2.11.6"
+scalaVersion := "2.11.7"
+
+val akkaVersion       = "2.3.14"
+
+val akkaStreamVersion = "1.0"
 
 libraryDependencies ++= Seq(
-  jdbc,
-  anorm,
-  cache,
-  ws,
-  "com.typesafe.slick" %% "slick" % "2.1.0",
-  "org.xerial" % "sqlite-jdbc" % "3.7.2",
-  "org.scalaz" %% "scalaz-core" % "7.1.4"
+  "com.typesafe.akka" %%  "akka-actor"                          % akkaVersion,
+  "com.typesafe.akka" %%  "akka-stream-experimental"            % akkaStreamVersion,
+  "com.typesafe.akka" %%  "akka-http-core-experimental"         % akkaStreamVersion,
+  "com.typesafe.akka" %%  "akka-http-experimental"              % akkaStreamVersion,
+  "com.typesafe.akka" %%  "akka-http-spray-json-experimental"   % akkaStreamVersion,
+  "com.typesafe.akka" %%  "akka-http-testkit-experimental"      % akkaStreamVersion,
+  "org.scalaz"        %% "scalaz-core" % "7.1.4"
 )
+
+Revolver.settings
