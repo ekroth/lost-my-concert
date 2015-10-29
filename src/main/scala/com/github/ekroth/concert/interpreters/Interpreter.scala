@@ -10,4 +10,6 @@ package concert
 import scalaz._
 import Scalaz._
 
-package object interpreters
+trait Interpreter {
+  def trans: api.Op ~> errorhandling.ResultF
+}
