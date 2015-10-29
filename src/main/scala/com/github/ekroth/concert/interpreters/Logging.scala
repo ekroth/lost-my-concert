@@ -22,12 +22,10 @@ trait Logging extends Interpreter {
 
   import errorhandling._
 
-  private val baseTrans = super.trans
-
-  abstract override def trans = new (Op ~> ResultF) {
-    override def apply[A](op: Op[A]): ResultF[A] = {
+  abstract override def trans = super.trans.compose(new (Op ~> Op) {
+    override def apply[A](op: Op[A]): Op[A] = {
       println(s"exec: '$op'")
-      baseTrans(op)
+      op
     }
-  }
+  })
 }
